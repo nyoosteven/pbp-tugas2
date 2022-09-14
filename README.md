@@ -6,7 +6,7 @@ Kelas   : PBP-D
 Link aplikasi di Heroku : [Link](https://tugas2-nyoo-pbp.herokuapp.com/katalog/)
 
 ## Bagan Request User dan korelasi antara urls.py, models.py, views.py, dan html.
-![](./render/django.png)
+![](./render/Django.png?raw=true)
 
 Penjelasan:
 1. Pada awalnya, user melakukan request terhadap server Django.
