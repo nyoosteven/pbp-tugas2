@@ -1,0 +1,112 @@
+[
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 1,
+        "fields": {
+            "watched": true,
+            "title": "Avengers: End Game",
+            "rating": 5,
+            "release_date": "2019-04-24",
+            "review": "One of the best superhero movies ever."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 2,
+        "fields": {
+            "watched": true,
+            "title": "Spiderman: No Way Home",
+            "rating": 5,
+            "release_date": "2021-12-15",
+            "review": "Glad to see them back as spiderman."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 3,
+        "fields": {
+            "watched": true,
+            "title": "Top Gun: Maverick",
+            "rating": 5,
+            "release_date": "2022-05-27",
+            "review": "Best movie in 2022."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 4,
+        "fields": {
+            "watched": true,
+            "title": "Star Wars: The Rise of Skywalker",
+            "rating": 4,
+            "release_date": "2019-12-18",
+            "review": "Just Hype, the story line just not too much."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 5,
+        "fields": {
+            "watched": true,
+            "title": "Maze Runner",
+            "rating": 5,
+            "release_date": "2014-09-17",
+            "review": "The movie was to tense."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 6,
+        "fields": {
+            "watched": true,
+            "title": "Minnions 2",
+            "rating": 5,
+            "release_date": "2022-06-28",
+            "review": "It's always fun watching minnion."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 7,
+        "fields": {
+            "watched": false,
+            "title": "Black Panther: Wakanda Forever",
+            "rating": 5,
+            "release_date": "2022-11-11",
+            "review": "Haven't seen yet."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 8,
+        "fields": {
+            "watched": true,
+            "title": "Only Murders in the Building",
+            "rating": 5,
+            "release_date": "2021-08-31",
+            "review": "Best murder TV Series."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 9,
+        "fields": {
+            "watched": false,
+            "title": "Avatar 2",
+            "rating": 5,
+            "release_date": "2022-12-16",
+            "review": "Can't wait."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlistItem",
+        "pk": 10,
+        "fields": {
+            "watched": false,
+            "title": "Obi Wan Kenobi",
+            "rating": 4,
+            "release_date": "2022-05-27",
+            "review": "When you first see this, you will feel the hype."
+        }
+    }
+]
