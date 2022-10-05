@@ -1,38 +1,95 @@
 {% extends 'base.html' %}
-
  {% block content %}
-
-  <h1>Tugas 4 Assignment PBP/PBD</h1>
-
-  <h5>Username: </h5>
-  <p>{{username}}</p>
-
-  <button>
-    <a href="{% url 'todolist:new_create_todolist' %}">Tambah Task Baru</a>
-  </button>
-
-  <table>
-    <tr>
-        <th>Date</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Finished</th>
-        <th>Change tasked</th>
-        <th>Delete tasked</th>
-    </tr>
-    {% for item in semua_task %}
-    <tr>
-      <th>{{item.date}}</th>
-      <th>{{item.title}}</th>
-      <th>{{item.description}}</th>
-      <th>{{item.is_finished}}</th>
-      <th><button><a href="updatetask/{{item.id}}">Change task finished status</a></button></th>
-      <th><button><a href="deletetask/{{item.id}}">Delete task</a></button></th>
-    </tr>
-    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-    {% endfor %}
-  </table>
-
-  <h5>Sesi terakhir login: {{ last_login }}</h5>
-  <button><a href="{% url 'todolist:logout' %}">Logout</a></button>
+<div class="bg-slate-400 min-h-screen">
+  <div class="bg-gray-500 h-16 w-screen">
+    <div class="flex justify-between">
+      <div class="p-2 px-4 font-semibold text-blue-800 text-2xl md:text-3xl lg:text-4xl">
+        To Do List
+      </div>
+      <div class="p-2 flex gap-2 lg:gap-3 pr-4">
+        <button class="w-36 px-7 py-3 bg-blue-500 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-400 hover:shadow-lg focus:bg-blue-400 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-400 active:shadow-lg transition duration-150 ease-in-out">
+          <a href="{% url 'todolist:new_create_todolist' %}">
+        Create Task</button>
+        
+        <button class="w-36 px-7 py-3 bg-blue-500 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-400 hover:shadow-lg focus:bg-blue-400 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-400 active:shadow-lg transition duration-150 ease-in-out">
+        <a href="{% url 'todolist:logout' %}">Logout</a></button>
+      </div>
+    </div>
+  </div>
+  <div class=" flex items-center justify-center">
+    <h1 class="font-bold text-2xl text-center mt-4">Welcome back {{username}}</h1>
+  </div>
+        <div class="flex flex-wrap gap-5">
+        {% for item in semua_task %}
+        <div class = "bg-white">
+            <p class="text-center text-xl font-semibold">{{item.title}}
+            <p class="text-center text-xs">{{item.date}}
+            <p class="text-center text-xs">{{item.description}}</p>
+            <div class="flex m-2 p-2 flex-col">
+              <div class="transition-opacity bg-gray-800 bg-opacity-10 rounded-2xl">
+                <p class ="text-green">
+                  Done : 
+                  {% if item.is_finished %}
+                  Yes
+                  {% else %}
+                  No
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+            <div class="p-2 flex gap-2 lg:gap-3 pr-4">
+              <button class="btn btn-primary submit inline-block 
+                              px-7 
+                              py-3 
+                              bg-blue-500 
+                              text-white 
+                              font-medium 
+                              text-sm 
+                              leading-snug 
+                              uppercase 
+                              rounded 
+                              shadow-md 
+                              hover:bg-blue-400 
+                              hover:shadow-lg 
+                              focus:bg-blue-400 
+                              focus:shadow-lg 
+                              focus:outline-none 
+                              focus:ring-0 
+                              active:bg-blue-400 
+                              active:shadow-lg 
+                              transition 
+                              duration-150 
+                              ease-in-out">
+              <a href="updatetask/{{item.id}}">Change task</a></button>
+              <button class=  "btn btn-primary submit inline-block 
+                              px-7 
+                              py-3 
+                              bg-blue-500 
+                              text-white 
+                              font-medium 
+                              text-sm 
+                              leading-snug 
+                              uppercase 
+                              rounded 
+                              shadow-md 
+                              hover:bg-blue-400 
+                              hover:shadow-lg 
+                              focus:bg-blue-400 
+                              focus:shadow-lg 
+                              focus:outline-none 
+                              focus:ring-0 
+                              active:bg-blue-400 
+                              active:shadow-lg 
+                              transition 
+                              duration-150 
+                              ease-in-out">
+              <a href="deletetask/{{item.id}}">Delete task</a></button>
+            </div>
+        {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+        {% endfor %}
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>       
  {% endblock content %}
