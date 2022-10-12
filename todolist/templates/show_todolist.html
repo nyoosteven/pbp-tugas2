@@ -1,43 +1,16 @@
 {% extends 'base.html' %}
- {% block content %}
-<div class="bg-slate-200 min-h-screen">
-  <div class="bg-slate-400 w-screen">
-    <div class="flex justify-between">
-      <div class="p-2 px-4 font-semibold text-black-800 text-2xl md:text-3xl lg:text-4xl">
-        To Do List
-      </div>
-      <div class="p-2 flex gap-2 lg:gap-3 pr-4">
-        <button class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-          <a href="{% url 'todolist:new_create_todolist' %}">
-            Create Task
-          </a>
-        </button>
-        
-        <button class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-          <a href="{% url 'todolist:logout' %}">Logout</a>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class=" flex items-center justify-center mb-10">
-    <h1 class="font-bold text-2xl text-center mt-4">Welcome back <span class="text-red-500">{{username}}</span></h1>
-  </div>
-  <div class="max-w-[80%] mx-auto">
-    <div class="flex flex-wrap gap-5 justify-center">
-      {% for item in semua_task %}
-      <div class = "bg-white rounded-lg transition ease-in-out hover:scale-105 hover:bg-gray-200">
-          <p class="text-center text-xl font-semibold">{{item.title}}
-          <p class="text-center text-xs">{{item.date}}
+{% block content %}
+<script>
+  $(document).ready(() => {
+    const card = (item) => `<div class = "bg-white rounded-lg transition ease-in-out hover:scale-105 hover:bg-gray-200">
+          <p class="text-center text-xl font-semibold">${item.fields.title}
+          <p class="text-center text-xs">${item.fields.date}
           <p class ="text-center text-green">
-              {% if item.is_finished %}
-              <span class="text-blue-500">Finished</span>
-              {% else %}
-              <span class="text-red-500">Not Yet</span>
-              {% endif %}
+              ${item.fields.is_finished ? "<span class='text-blue-500'>Finished</span>" : "<span class='text-red-500'>Not Yet</span>"}
           </p>
           <div class="flex m-2 p-1 flex-col">
             <div class="transition-opacity bg-gray-800 bg-opacity-10 rounded-2xl">
-              <p class="text-center text-xs">{{item.description}}</p> 
+              <p class="text-center text-xs">${item.fields.description}</p> 
             </div>
           </div>
           <div class="p-2 flex gap-2 lg:gap-3 pr-4">
@@ -63,7 +36,7 @@
                               transition 
                               duration-150 
                               ease-in-out">
-              <a href="updatetask/{{item.id}}">Change task</a></button>
+              <a href="updatetask/${item.pk}">Change task</a></button>
               <button class=  "btn btn-primary submit inline-block 
                               px-7 
                               py-3 
@@ -86,12 +59,192 @@
                               transition 
                               duration-150 
                               ease-in-out">
-              <a href="deletetask/{{item.id}}">Delete task</a></button>
+              <a href="deletetask/${item.pk}">Delete task</a></button>
         </div>
+      </div>`
+
+    const openModal = e => {
+      e.preventDefault(); // prevent refresh
+      $("#create-task-modal").removeClass("hidden");
+    };
+
+    const closeModal = e => {
+      $("#create-task-modal").addClass("hidden");
+    };
+
+    $("#close-icon").click(closeModal);
+
+    const getTask = () => {
+      $.get("{% url 'todolist:show_json' %}", data => {
+        $.each(data, (i, item) => {
+          $("#todolist").append(card(item));
+        });
+      });
+    }
+
+    $("#create-task-form").submit(e => {
+      e.preventDefault();
+
+      // get the CSRF Token
+      const csrftoken = document.querySelector(
+        "[name=csrfmiddlewaretoken]"
+      ).value;
+
+      const title = $("#title").val();
+      closeModal()
+      const description = $("#description").val();
+
+      $.ajax(
+        {
+          type: "POST",
+          url: "{% url 'todolist:addtask' %}",
+          headers: { "X-CSRFToken": csrftoken }, // give CSRF token to the header
+          mode: "same-origin", // Do not send CSRF token to another domain.
+          data:
+          {
+            title: title,
+            description: description,
+          },
+          success: response => {
+            $("#create-task-form").trigger("reset");
+            $("#todolist").append(card(response));
+          },
+        });
+
+    });
+
+    getTask();
+
+    $("#create_task").click(openModal);
+    $("#close-modal").click(closeModal);
+  });
+</script>
+
+{% comment %} MODAL {% endcomment %}
+<div id="create-task-modal"
+  class="w-full fixed flex justify-center w-full z-10 min-h-screen items-center bg-black bg-opacity-50 hidden">
+  <div class="h-screen login flex justify-center items-center">
+    <div class="block bg-white shadow-lg rounded-lg p-6">
+      <div class="create task">
+        <div class="flex justify-between">
+          <h1 class="font-bold text-blue-600 text-2xl mt-0.3 mb-1 ml-0.3">Task baru</h1>
+          <div class="cursor-pointer" id="close-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+
+        </div>
+        <form method="POST" action="" id="create-task-form">
+          {% csrf_token %}
+          <tr>
+            <td>
+              <h1 class="font-bold">Judul: </h1>
+            </td>
+            <td><input type="text" name="title" placeholder="Title" id="title" required class="form-control 
+                                    block w-full 
+                                    px-4 
+                                    py-2 
+                                    text-l 
+                                    font-normal 
+                                    text-gray-700 
+                                    bg-gray-100 
+                                    bg-clip-padding 
+                                    border 
+                                    border-solid 
+                                    border-gray-300 
+                                    rounded 
+                                    transition 
+                                    ease-in-out 
+                                    m-0 
+                                    focus:text-gray-700 
+                                    focus:bg-white 
+                                    focus:border-blue-600 
+                                    focus:outline-none"></td>
+          </tr>
+          <tr>
+            <td>
+              <h1 class="font-bold">Deskripsi: </h1>
+            </td>
+            <td><input type="text" name="description" placeholder="Description" id="description" required class="form-control 
+                                    block w-full 
+                                    px-4 
+                                    py-2 
+                                    text-l 
+                                    font-normal 
+                                    text-gray-700 
+                                    bg-gray-100 
+                                    bg-clip-padding 
+                                    border 
+                                    border-solid 
+                                    border-gray-300 
+                                    rounded 
+                                    transition 
+                                    ease-in-out 
+                                    m-0 
+                                    focus:text-gray-700 
+                                    focus:bg-white 
+                                    focus:border-blue-600 
+                                    focus:outline-none"></td>
+          </tr>
+          <tr>
+            <div class="text-center lg:text-center py-3">
+              <td><input class="inline-block 
+                                px-7 
+                                py-3 
+                                bg-blue-500 
+                                text-white 
+                                font-medium 
+                                text-sm 
+                                leading-snug 
+                                uppercase 
+                                rounded 
+                                shadow-md 
+                                hover:bg-blue-400 
+                                hover:shadow-lg 
+                                focus:bg-blue-400 
+                                focus:shadow-lg 
+                                focus:outline-none 
+                                focus:ring-0 
+                                active:bg-blue-400 
+                                active:shadow-lg 
+                                transition 
+                                duration-150 
+                                ease-in-out" type="submit" value="Submit"></td>
+            </div>
+          </tr>
+        </form>
       </div>
-      {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-      {% endfor %}
     </div>
-  </div> 
+  </div>
+</div>
+
+<div class="bg-slate-200 min-h-screen">
+  <div class="bg-slate-400 w-screen">
+    <div class="flex justify-between">
+      <div class="p-2 px-4 font-semibold text-black-800 text-2xl md:text-3xl lg:text-4xl">
+        To Do List
+      </div>
+      <div class="p-2 flex gap-2 lg:gap-3 pr-4">
+        <button id="create_task"
+          class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+          Create Task
+        </button>
+
+        <button
+          class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+          <a href="{% url 'todolist:logout' %}">Logout</a>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class=" flex items-center justify-center mb-10">
+    <h1 class="font-bold text-2xl text-center mt-4">Welcome back <span class="text-red-500">{{username}}</span></h1>
+  </div>
+  <div class="max-w-[80%] mx-auto">
+    <div class="flex flex-wrap gap-5 justify-center" id="todolist">
+    </div>
+  </div>
   {% endblock content %}
 </div

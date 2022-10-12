@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.core import serializers
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
@@ -12,10 +12,10 @@ import datetime
 # Create your views here.
 @login_required(login_url='/todolist/login/')
 def show_todolist(request):
-    task_list = Task.objects.filter(user=request.user)
+    # task_list = Task.objects.filter(user=request.user)
     context = {
         'username': request.user.username,
-        'semua_task': task_list,
+        # 'semua_task': task_list,
     }
     return render(request, 'show_todolist.html', context)
 
@@ -58,7 +58,6 @@ def new_create_todolist(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        print(title,description)
         todo = Task.objects.create(title=title, description=description,date=datetime.date.today(), user=request.user)
         response = HttpResponseRedirect(reverse("todolist:show_todolist")) 
         return response
@@ -85,3 +84,30 @@ def deletetask(request, id):
 
     messages.success(request, 'Task telah berhasil dihapus!')
     return redirect('todolist:show_todolist')
+
+@login_required(login_url="/todolist/login/")
+def show_json(request):
+    task = Task.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", task), content_type="application/json")
+
+def addtask(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        task = Task.objects.create(
+            user=request.user,
+            title=title,
+            description=description,
+            date=datetime.datetime.today(),
+        )
+        return JsonResponse(
+            {
+                "pk": task.id,
+                "fields": {
+                    "title": task.title,
+                    "description": task.description,
+                    "is_finished": task.is_finished,
+                    "date": task.date,
+                },
+            },
+        )
