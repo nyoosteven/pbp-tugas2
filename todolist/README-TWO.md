@@ -15,9 +15,10 @@ Event-Driven Programming adalah salah satu teknik pemogramman, yang konsep kerja
 Konsep Event-Driven Programming sama seperti konsep pemogramman menggunakan Procedure.  pemograman yang memiliki input, proses dan output. Namun, ada satu penambahan yang berbeda, yaitu konsep pemilihan untuk mengeksekusi proses programnya. Event-Driven programming juga bisa dibilang suatu paradigma pemrograman yang alur programnya ditentukan oleh suatu event / peristiwa yang merupakan keluaran atau tindakan pengguna atau bisa berupa pesan dari program lainnya. 
 
 ## Asynchronous Programming pada AJAX
-Dengan menggunakan AJAX, website dapat mengirimkan request dan menerima response secara asynchronous. Ketika response dari server sampai ke browser, AJAX akan mengupdate website dari background. Karena response diterima secara asynchronous, website masih bisa digunakan oleh user meskipun AJAX sedang menunggu response server untuk interaksi user terakhir. Dengan begini, user dapat terus menerus menggunakan website tanpa perlu menunggu setiap kali user melakukan sesuatu dalam website.
+Pengunaan AJAX, websit dapat mengirimkan request dan menerima response secara asynchronous. Ketika response dari server sampai ke browser, AJAX akan mengupdate website dari background. Karena response diterima secara asynchronous, website masih bisa digunakan oleh user meskipun AJAX sedang menunggu response server untuk interaksi user terakhir. User dapat melakukan  dan menggunakan website, terus menerus setiap kali tanpa menunggu.
 
 ## Implementasi
 - Buat fungsi addtask yang digunakan untuk menambahkan data dari json.
 - Menggunakan url addtask
 - Implementasi penggunaan Ajax pada todolist.html
+- Membuat beberapa function card, modal, open modal, close modal
